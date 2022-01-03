@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
@@ -40,8 +40,9 @@ namespace Ink
                 "   -j:              Output in JSON format (for communication with tools like Inky)\n"+
                 "   -s:              Print stats about story including word count in JSON format\n" +
                 "   -v:              Verbose mode - print compilation timings\n"+
-                "   -k:              Keep inklecate running in play mode even after story is complete\n"+
-                "   -l:              Launch the language server (ignores other options).\n");
+                "   -k:              Keep inklecate running in play mode even after story is complete\n" +
+                "   -l:              Launch the language server (ignores other options).\n" +
+                "   -x <directory>:              Import plugins for the compiler.");
             Environment.Exit (ExitCodeError);
         }
 
@@ -114,7 +115,7 @@ namespace Ink
 
                 compiler = new Compiler (inputString, new Compiler.Options {
                     sourceFilename = opts.inputFile,
-                    pluginNames = pluginNames,
+                    pluginDirectories = pluginDirectories,
                     countAllVisits = opts.countAllVisits,
                     errorHandler = OnError
                 });
@@ -318,10 +319,10 @@ namespace Ink
             }
 
 			opts = new Options();
-            pluginNames = new List<string> ();
+            pluginDirectories = new List<string> ();
 
             bool nextArgIsOutputFilename = false;
-            bool nextArgIsPlugin = false;
+            bool nextArgIsPluginDirectory = false;
 
 			// Process arguments
             int argIdx = 0;
@@ -330,9 +331,9 @@ namespace Ink
                 if (nextArgIsOutputFilename) {
                     opts.outputFile = arg;
                     nextArgIsOutputFilename = false;
-                } else if (nextArgIsPlugin) {
-                    pluginNames.Add (arg);
-                    nextArgIsPlugin = false;
+                } else if (nextArgIsPluginDirectory) {
+                    pluginDirectories.Add (arg);
+                    nextArgIsPluginDirectory = false;
                 }
 
 				// Options
@@ -362,7 +363,7 @@ namespace Ink
                             opts.countAllVisits = true;
                             break;
                         case 'x':
-                            nextArgIsPlugin = true;
+                            nextArgIsPluginDirectory = true;
                             break;
                         case 'k':
                             opts.keepOpenAfterStoryFinish = true;
@@ -405,7 +406,7 @@ namespace Ink
         }
 
         Options opts;
-        List<string> pluginNames;
+        List<string> pluginDirectories;
 
         List<string> _errors = new List<string>();
         List<string> _warnings = new List<string>();

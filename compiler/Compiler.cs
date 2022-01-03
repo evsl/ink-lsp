@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Ink;
 
@@ -9,7 +9,7 @@ namespace Ink
         public class Options
         {
             public string sourceFilename;
-            public List<string> pluginNames;
+            public List<string> pluginDirectories;
             public bool countAllVisits;
             public Ink.ErrorHandler errorHandler;
             public Ink.IFileHandler fileHandler;
@@ -31,8 +31,8 @@ namespace Ink
         {
             _inputString = inkSource;
             _options = options ?? new Options();
-            if( _options.pluginNames != null )
-                _pluginManager = new PluginManager (_options.pluginNames);
+            if( _options.pluginDirectories != null )
+                _pluginManager = new PluginManager (_options.pluginDirectories);
         }
 
         public Parsed.Story Parse()
@@ -45,7 +45,14 @@ namespace Ink
         public Runtime.Story Generate()
         {
             if( _pluginManager != null )
-                _pluginManager.PostParse(_parsedStory);
+                _inputString = _pluginManager.PreParse(_inputString);
+
+            Parse();
+
+            if( _pluginManager != null )
+                _parsedStory = _pluginManager.PostParse(_parsedStory);
+
+            Parse();
 
             if (_parsedStory != null && !_hadParseError) {
 
@@ -54,7 +61,7 @@ namespace Ink
                 _runtimeStory = _parsedStory.ExportRuntime (_options.errorHandler);
 
                 if( _pluginManager != null )
-                    _pluginManager.PostExport (_parsedStory, _runtimeStory);
+                    _runtimeStory = _pluginManager.PostExport (_parsedStory, _runtimeStory);
             } else {
                 _runtimeStory = null;
             }
