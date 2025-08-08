@@ -270,3 +270,6 @@ paket-files/
 .idea/
 *.sln.iml
 .ionide/
+
+# Language Server build output
+dist/LanguageServer/
