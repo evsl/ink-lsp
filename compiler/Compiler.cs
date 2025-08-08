@@ -13,6 +13,7 @@ namespace Ink
             public bool countAllVisits;
             public Ink.ErrorHandler errorHandler;
             public Ink.IFileHandler fileHandler;
+            public List<string> pluginNames { get; set; }
         }
 
         public Parsed.Story parsedStory {
