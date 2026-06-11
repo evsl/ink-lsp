@@ -34,6 +34,8 @@ The server supports one configuration setting.
 
 - `ink.languageServer.mainFilePath` is the path to the main ink file, used by `inklecate` to build the story. If the setting is not provided, the current buffer sent by the client will be treated as the main file.
 
+The server automatically handles `workspace/didChangeConfiguration` notifications from clients and will recompile all open documents when configuration changes.
+
 ### Logs
 The language server is quite chatty, logs are stored in the following directories:
 

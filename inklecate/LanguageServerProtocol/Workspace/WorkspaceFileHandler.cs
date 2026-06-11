@@ -6,6 +6,7 @@ using Ink.LanguageServerProtocol.Workspace.Interfaces;
 using Microsoft.Extensions.Logging;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
+using Newtonsoft.Json;
 
 namespace Ink.LanguageServerProtocol
 {
@@ -94,12 +95,15 @@ namespace Ink.LanguageServerProtocol
             };
 
             var configurationContainer = await _connection.Workspace.WorkspaceConfiguration(configurationParams);
+            _logger.LogDebug($"TESTING: Resolving main document");
+            _logger.LogDebug(JsonConvert.SerializeObject(configurationContainer));
 
             // Only picking up the first configuration item for now.
             var enumerator = configurationContainer.GetEnumerator();
             if (enumerator.MoveNext())
             {
                 var jToken = enumerator.Current;
+                _logger.LogDebug(JsonConvert.SerializeObject(jToken));
                 inkConfiguration = new InkConfiguration(inkConfiguration, jToken);
             }
 

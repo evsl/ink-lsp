@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using Ink.LanguageServerProtocol.Backend.Interfaces;
 
@@ -16,6 +17,7 @@ namespace Ink.LanguageServerProtocol.Workspace.Interfaces
         Uri Uri { get; }
 
         TextDocumentItem GetTextDocument(Uri uri);
+        IEnumerable<TextDocumentItem> GetTextDocuments();
         void UpdateContentOfTextDocument(Uri uri, String text);
         void SetTextDocument(Uri uri, TextDocumentItem document);
         void RemoveTextDocument(Uri uri);

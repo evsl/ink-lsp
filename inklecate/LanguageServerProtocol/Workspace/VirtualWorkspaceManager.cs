@@ -92,6 +92,11 @@ namespace Ink.LanguageServerProtocol.Workspace
             }
         }
 
+        public IEnumerable<TextDocumentItem> GetTextDocuments()
+        {
+            return _documents.Values;
+        }
+
         public ICompilationResult GetCompilationResult(Uri uri)
         {
             return _compilationResults.GetValueOrDefault(uri);

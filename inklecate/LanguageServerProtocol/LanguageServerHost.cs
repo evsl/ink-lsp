@@ -108,6 +108,7 @@ namespace Ink.LanguageServerProtocol
                 .WithHandler<InkTextDocumentHandler>()
                 .WithHandler<InkDefinitionHandler>()
                 .WithHandler<InkHoverHandler>()
+                .WithHandler<InkWorkspaceHandler>()
                 .WithServices(Services)
                 .OnInitialize(Initialize);
 
